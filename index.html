@@ -10,117 +10,479 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Validación Bingo CCP</title>
+  <title>BINGO CCP MEDELLÍN</title>
+
 
   <script
     src="https://unpkg.com/html5-qrcode"
   ></script>
 
+
   <style>
 
+    * {
+      box-sizing: border-box;
+    }
+
+
     body {
-      font-family: Arial, sans-serif;
+
       margin: 0;
-      padding: 20px;
-      text-align: center;
-      background: #f4f6f8;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        #f3f5f7;
+
+      color:
+        #202124;
+
+      min-height:
+        100vh;
+
     }
 
-    h1 {
-      margin-bottom: 5px;
-    }
 
-    .subtitulo {
-      margin-top: 0;
-      color: #555;
-    }
+    /* ==========================================
+       CONTENEDOR PRINCIPAL
+       ========================================== */
 
-    #reader {
+    .app {
+
       width: 100%;
-      max-width: 500px;
-      margin: 20px auto;
+
+      max-width: 560px;
+
+      margin: 0 auto;
+
+      padding:
+        18px 16px 30px;
+
     }
+
+
+    /* ==========================================
+       ENCABEZADO
+       ========================================== */
+
+    .encabezado {
+
+      text-align: center;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .encabezado h1 {
+
+      margin:
+        0 0 5px;
+
+      font-size:
+        25px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        .5px;
+
+    }
+
+
+    .encabezado p {
+
+      margin:
+        0;
+
+      color:
+        #6b7280;
+
+      font-size:
+        15px;
+
+    }
+
+
+    /* ==========================================
+       TARJETA
+       ========================================== */
+
+    .card {
+
+      background:
+        #ffffff;
+
+      border-radius:
+        18px;
+
+      padding:
+        22px;
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.08);
+
+      margin-bottom:
+        16px;
+
+    }
+
+
+    /* ==========================================
+       BOTONES
+       ========================================== */
 
     button {
-      padding: 14px 25px;
+
+      width: 100%;
+
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 6px;
+
+      border-radius:
+        12px;
+
+      padding:
+        16px;
+
+      font-size:
+        17px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+      transition:
+        .2s;
+
     }
+
+
+    button:disabled {
+
+      opacity:
+        .6;
+
+      cursor:
+        not-allowed;
+
+    }
+
 
     #btnEscanear {
-      background: #1a73e8;
-      color: white;
+
+      background:
+        #1a73e8;
+
+      color:
+        white;
+
     }
+
+
+    #btnEscanear:hover {
+
+      background:
+        #155fc0;
+
+    }
+
 
     #btnEntregar {
-      background: #188038;
-      color: white;
-      width: 100%;
-      margin-top: 20px;
+
+      background:
+        #188038;
+
+      color:
+        white;
+
+      margin-top:
+        20px;
+
     }
+
+
+    #btnEntregar:hover {
+
+      background:
+        #126b2c;
+
+    }
+
 
     #btnNuevo {
-      background: #555;
-      color: white;
+
+      background:
+        #5f6368;
+
+      color:
+        white;
+
+      margin-top:
+        18px;
+
     }
+
+
+    /* ==========================================
+       ESTADO
+       ========================================== */
 
     #estado {
-      margin-top: 20px;
-      font-size: 17px;
+
+      text-align:
+        center;
+
+      color:
+        #6b7280;
+
+      font-size:
+        15px;
+
+      margin:
+        14px 0;
+
+      min-height:
+        20px;
+
     }
+
+
+    /* ==========================================
+       LECTOR QR
+       ========================================== */
+
+    #reader {
+
+      width:
+        100%;
+
+      margin:
+        15px auto;
+
+    }
+
+
+    #reader video {
+
+      border-radius:
+        14px;
+
+    }
+
+
+    /* ==========================================
+       RESULTADO
+       ========================================== */
 
     #resultado {
-      display: none;
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 22px;
-      background: white;
-      border-radius: 12px;
-      text-align: left;
-      box-shadow: 0 2px 10px rgba(0,0,0,.10);
+
+      display:
+        none;
+
     }
 
-    .dato {
-      margin: 12px 0;
+
+    .tituloResultado {
+
+      text-align:
+        center;
+
+      font-size:
+        20px;
+
+      font-weight:
+        800;
+
+      margin-bottom:
+        20px;
+
     }
 
-    .etiqueta {
-      font-weight: bold;
-    }
-
-    .cantidad {
-      text-align: center;
-      font-size: 30px;
-      font-weight: bold;
-      margin: 20px 0;
-    }
 
     .ok {
-      color: #188038;
-      font-weight: bold;
-      font-size: 20px;
-      text-align: center;
+
+      color:
+        #188038;
+
     }
+
 
     .error {
-      color: #d93025;
-      font-weight: bold;
-      font-size: 20px;
-      text-align: center;
+
+      color:
+        #d93025;
+
     }
 
-    .entregado {
-      color: #188038;
-      font-weight: bold;
-      text-align: center;
-      font-size: 24px;
+
+    .advertencia {
+
+      color:
+        #b06000;
+
     }
+
+
+    /* ==========================================
+       DATOS
+       ========================================== */
+
+    .dato {
+
+      margin:
+        12px 0;
+
+      font-size:
+        16px;
+
+    }
+
+
+    .etiqueta {
+
+      font-weight:
+        700;
+
+      color:
+        #555;
+
+    }
+
+
+    /* ==========================================
+       CANTIDAD
+       ========================================== */
+
+    .cantidadBox {
+
+      text-align:
+        center;
+
+      background:
+        #f1f3f4;
+
+      border-radius:
+        14px;
+
+      padding:
+        18px;
+
+      margin:
+        20px 0;
+
+    }
+
+
+    .cantidadNumero {
+
+      font-size:
+        42px;
+
+      font-weight:
+        800;
+
+      line-height:
+        1;
+
+    }
+
+
+    .cantidadTexto {
+
+      margin-top:
+        6px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+      color:
+        #6b7280;
+
+      letter-spacing:
+        .5px;
+
+    }
+
+
+    /* ==========================================
+       MENSAJE FINAL
+       ========================================== */
+
+    .mensajeFinal {
+
+      text-align:
+        center;
+
+      font-size:
+        24px;
+
+      font-weight:
+        800;
+
+      margin:
+        15px 0;
+
+    }
+
 
     .oculto {
-      display: none !important;
+
+      display:
+        none !important;
+
+    }
+
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+
+    @media (max-width: 480px) {
+
+      .app {
+
+        padding:
+          14px 12px 25px;
+
+      }
+
+
+      .encabezado h1 {
+
+        font-size:
+          22px;
+
+      }
+
+
+      .card {
+
+        padding:
+          18px;
+
+        border-radius:
+          16px;
+
+      }
+
+
+      .cantidadNumero {
+
+        font-size:
+          38px;
+
+      }
+
     }
 
   </style>
@@ -130,610 +492,963 @@
 
 <body>
 
-  <h1>VALIDACIÓN DE TABLAS</h1>
 
-  <p class="subtitulo">
-    Bingo CCP
-  </p>
+<div class="app">
 
 
-  <button
-    id="btnEscanear"
-    onclick="iniciarEscaner()"
-  >
-    ESCANEAR QR
-  </button>
+  <!-- ========================================
+       ENCABEZADO
+       ======================================== -->
+
+  <div class="encabezado">
+
+    <h1>
+      BINGO CCP MEDELLÍN
+    </h1>
+
+    <p>
+      Validación y entrega de tablas
+    </p>
+
+  </div>
 
 
-  <div id="reader"></div>
+  <!-- ========================================
+       TARJETA PRINCIPAL
+       ======================================== -->
+
+  <div class="card">
 
 
-  <p id="estado">
-    Presiona ESCANEAR QR para comenzar.
-  </p>
+    <button
+      id="btnEscanear"
+      onclick="iniciarEscaner()"
+    >
+      ESCANEAR QR
+    </button>
 
 
-  <div id="resultado"></div>
+    <div id="reader"></div>
 
 
-  <script>
+    <div id="estado">
 
-    let scanner = null;
-    let procesando = false;
-    let codigoActual = null;
+      Presiona ESCANEAR QR
+      para comenzar.
 
-
-    // ==================================================
-    // URL DE APPS SCRIPT
-    // ==================================================
-
-    const URL_APPS_SCRIPT =
-      "https://script.google.com/macros/s/AKfycbxL6niLa7ilreRNdVdPQl0dPspYceA00qA-CsdwRltcDGF9NXdmeeBXDF773LzGmLT_/exec";
+    </div>
 
 
-    // ==================================================
-    // INICIAR ESCÁNER
-    // ==================================================
+  </div>
 
-    function iniciarEscaner() {
 
-      if (procesando) {
-        return;
+  <!-- ========================================
+       RESULTADO
+       ======================================== -->
+
+  <div
+    id="resultado"
+    class="card"
+  ></div>
+
+
+</div>
+
+
+<script>
+
+
+  let scanner = null;
+
+  let procesando = false;
+
+  let codigoActual = null;
+
+
+  // ==========================================
+  // URL APPS SCRIPT
+  // ==========================================
+
+  const URL_APPS_SCRIPT =
+    "https://script.google.com/macros/s/AKfycbxL6niLa7ilreRNdVdPQl0dPspYceA00qA-CsdwRltcDGF9NXdmeeBXDF773LzGmLT_/exec";
+
+
+  // ==========================================
+  // INICIAR ESCÁNER
+  // ==========================================
+
+  function iniciarEscaner() {
+
+
+    if (procesando) {
+
+      return;
+
+    }
+
+
+    document
+      .getElementById("btnEscanear")
+      .classList.add("oculto");
+
+
+    document
+      .getElementById("resultado")
+      .style.display =
+        "none";
+
+
+    document
+      .getElementById("estado")
+      .innerText =
+        "Solicitando acceso a la cámara...";
+
+
+    scanner =
+      new Html5Qrcode("reader");
+
+
+    const configuracion = {
+
+      fps: 10,
+
+      qrbox: {
+
+        width: 250,
+
+        height: 250
+
+      },
+
+      aspectRatio: 1.0
+
+    };
+
+
+    scanner.start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      configuracion,
+
+      codigoLeido,
+
+      function(error) {
+
+        // Errores normales
+        // mientras busca QR.
+
       }
 
-      document
-        .getElementById("btnEscanear")
-        .classList.add("oculto");
+    )
 
 
-      document
-        .getElementById("resultado")
-        .style.display = "none";
+    .then(function() {
 
 
       document
         .getElementById("estado")
         .innerText =
-          "Solicitando acceso a la cámara...";
+          "Apunta la cámara hacia el código QR.";
 
 
-      scanner =
-        new Html5Qrcode("reader");
+    })
 
 
-      const configuracion = {
-
-        fps: 10,
-
-        qrbox: {
-          width: 250,
-          height: 250
-        },
-
-        aspectRatio: 1.0
-
-      };
+    .catch(function(error) {
 
 
-      scanner.start(
+      console.error(error);
 
-        {
-          facingMode: "environment"
-        },
 
-        configuracion,
+      document
+        .getElementById("estado")
+        .innerText =
+          "No fue posible acceder a la cámara.";
 
-        codigoLeido,
 
-        function(error) {
-          // Ignorar errores normales.
-        }
+      document
+        .getElementById("btnEscanear")
+        .classList
+        .remove("oculto");
 
-      )
+
+    });
+
+  }
+
+
+  // ==========================================
+  // QR LEÍDO
+  // ==========================================
+
+  function codigoLeido(codigo) {
+
+
+    if (procesando) {
+
+      return;
+
+    }
+
+
+    procesando = true;
+
+    codigoActual = codigo;
+
+
+    document
+      .getElementById("estado")
+      .innerText =
+        "QR leído. Consultando compra...";
+
+
+    detenerEscaner();
+
+
+    consultarCompra(codigo);
+
+  }
+
+
+  // ==========================================
+  // DETENER ESCÁNER
+  // ==========================================
+
+  function detenerEscaner() {
+
+
+    if (!scanner) {
+
+      return;
+
+    }
+
+
+    scanner.stop()
+
       .then(function() {
 
-        document
-          .getElementById("estado")
-          .innerText =
-            "Cámara funcionando. Apunta al código QR.";
+        scanner.clear();
+
+        scanner = null;
 
       })
+
       .catch(function(error) {
 
         console.error(error);
 
-        document
-          .getElementById("estado")
-          .innerText =
-            "No fue posible acceder a la cámara.";
-
-        document
-          .getElementById("btnEscanear")
-          .classList.remove("oculto");
-
       });
 
-    }
+  }
 
 
-    // ==================================================
-    // QR LEÍDO
-    // ==================================================
+  // ==========================================
+  // CONSULTAR COMPRA
+  // ==========================================
 
-    function codigoLeido(codigo) {
-
-      if (procesando) {
-        return;
-      }
-
-      procesando = true;
-
-      codigoActual = codigo;
+  function consultarCompra(codigo) {
 
 
-      document
-        .getElementById("estado")
-        .innerText =
-          "QR leído. Consultando compra...";
+    const callback =
+      "respuestaAppsScript";
 
 
-      detenerEscaner();
+    const url =
+
+      URL_APPS_SCRIPT +
+
+      "?pagina=consulta" +
+
+      "&codigo=" +
+
+      encodeURIComponent(codigo) +
+
+      "&callback=" +
+
+      callback;
 
 
-      consultarCompra(codigo);
-
-    }
-
-
-    // ==================================================
-    // DETENER ESCÁNER
-    // ==================================================
-
-    function detenerEscaner() {
-
-      if (!scanner) {
-        return;
-      }
-
-      scanner.stop()
-        .then(function() {
-
-          scanner.clear();
-
-          scanner = null;
-
-        })
-        .catch(function(error) {
-
-          console.error(error);
-
-        });
-
-    }
+    const script =
+      document.createElement("script");
 
 
-    // ==================================================
-    // CONSULTAR COMPRA
-    // ==================================================
-
-    function consultarCompra(codigo) {
-
-      const callback =
-        "respuestaAppsScript";
+    script.src =
+      url;
 
 
-      const url =
-        URL_APPS_SCRIPT +
-        "?pagina=consulta" +
-        "&codigo=" +
-        encodeURIComponent(codigo) +
-        "&callback=" +
-        callback;
+    script.onerror =
+      function() {
 
-
-      const script =
-        document.createElement("script");
-
-
-      script.src = url;
-
-
-      script.onerror = function() {
 
         document
           .getElementById("estado")
           .innerText =
             "No fue posible consultar la compra.";
 
+
         procesando = false;
 
       };
 
 
-      document.body.appendChild(script);
+    document
+      .body
+      .appendChild(script);
+
+  }
+
+
+  // ==========================================
+  // RESPUESTA CONSULTA
+  // ==========================================
+
+  function respuestaAppsScript(resultado) {
+
+
+    mostrarResultado(resultado);
+
+
+    procesando = false;
+
+  }
+
+
+  // ==========================================
+  // MOSTRAR RESULTADO
+  // ==========================================
+
+  function mostrarResultado(resultado) {
+
+
+    const contenedor =
+      document.getElementById("resultado");
+
+
+    contenedor.style.display =
+      "block";
+
+
+    if (!resultado || !resultado.ok) {
+
+
+      contenedor.innerHTML = `
+
+        <div class="tituloResultado error">
+
+          COMPRA NO ENCONTRADA
+
+        </div>
+
+        <div class="dato">
+
+          ${
+            resultado &&
+            resultado.mensaje
+              ? resultado.mensaje
+              : "No fue posible validar el código."
+          }
+
+        </div>
+
+        <button
+          id="btnNuevo"
+          onclick="nuevaLectura()"
+        >
+
+          ESCANEAR NUEVA COMPRA
+
+        </button>
+
+      `;
+
+
+      return;
 
     }
 
 
-    // ==================================================
-    // RESPUESTA CONSULTA
-    // ==================================================
+    codigoActual =
+      resultado.codigo;
 
-    function respuestaAppsScript(resultado) {
 
-      mostrarResultado(resultado);
+    const estadoPago =
+      String(resultado.estadoPago)
+        .trim()
+        .toUpperCase();
 
-      procesando = false;
+
+    const estadoEntrega =
+      String(resultado.estadoEntrega)
+        .trim()
+        .toUpperCase();
+
+
+    // ========================================
+    // YA ENTREGADA
+    // ========================================
+
+    if (
+      estadoEntrega ===
+      "ENTREGADO"
+    ) {
+
+
+      contenedor.innerHTML = `
+
+        <div
+          class="tituloResultado advertencia"
+        >
+
+          COMPRA YA ENTREGADA
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Código:
+          </span>
+
+          ${resultado.codigo}
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Cliente:
+          </span>
+
+          ${resultado.nombre}
+
+        </div>
+
+
+        <div class="cantidadBox">
+
+          <div class="cantidadNumero">
+
+            ${resultado.cantidad}
+
+          </div>
+
+          <div class="cantidadTexto">
+
+            TABLAS
+
+          </div>
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Estado de pago:
+          </span>
+
+          ${resultado.estadoPago}
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Estado de entrega:
+          </span>
+
+          <strong>
+            ENTREGADO
+          </strong>
+
+        </div>
+
+
+        <div
+          class="mensajeFinal error"
+        >
+
+          NO ENTREGAR NUEVAMENTE
+
+        </div>
+
+
+        <button
+          id="btnNuevo"
+          onclick="nuevaLectura()"
+        >
+
+          ESCANEAR NUEVA COMPRA
+
+        </button>
+
+      `;
+
+
+      return;
 
     }
 
 
-    // ==================================================
-    // MOSTRAR RESULTADO
-    // ==================================================
+    // ========================================
+    // PAGO NO CONFIRMADO
+    // ========================================
 
-function mostrarResultado(resultado) {
+    if (
+      estadoPago !==
+      "CONFIRMADO"
+    ) {
 
-  const contenedor =
-    document.getElementById("resultado");
 
-  contenedor.style.display = "block";
+      contenedor.innerHTML = `
+
+        <div
+          class="tituloResultado error"
+        >
+
+          PAGO NO CONFIRMADO
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Código:
+          </span>
+
+          ${resultado.codigo}
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Cliente:
+          </span>
+
+          ${resultado.nombre}
+
+        </div>
+
+
+        <div class="cantidadBox">
+
+          <div class="cantidadNumero">
+
+            ${resultado.cantidad}
+
+          </div>
+
+          <div class="cantidadTexto">
+
+            TABLAS
+
+          </div>
+
+        </div>
+
+
+        <div class="dato">
+
+          <span class="etiqueta">
+            Estado de pago:
+          </span>
+
+          ${resultado.estadoPago}
+
+        </div>
+
+
+        <div
+          class="mensajeFinal error"
+        >
+
+          NO ENTREGAR TABLAS
+
+        </div>
+
+
+        <button
+          id="btnNuevo"
+          onclick="nuevaLectura()"
+        >
+
+          ESCANEAR NUEVA COMPRA
+
+        </button>
+
+      `;
+
+
+      return;
+
+    }
+
+
+    // ========================================
+    // LISTA PARA ENTREGA
+    // ========================================
+
+    contenedor.innerHTML = `
+
+      <div
+        class="tituloResultado ok"
+      >
+
+        COMPRA LISTA PARA ENTREGA
+
+      </div>
+
+
+      <div class="dato">
+
+        <span class="etiqueta">
+          Código:
+        </span>
+
+        ${resultado.codigo}
+
+      </div>
+
+
+      <div class="dato">
+
+        <span class="etiqueta">
+          Cliente:
+        </span>
+
+        ${resultado.nombre}
+
+      </div>
+
+
+      <div class="cantidadBox">
+
+        <div class="cantidadNumero">
+
+          ${resultado.cantidad}
+
+        </div>
+
+        <div class="cantidadTexto">
+
+          TABLAS A ENTREGAR
+
+        </div>
+
+      </div>
+
+
+      <div class="dato">
+
+        <span class="etiqueta">
+          Estado de pago:
+        </span>
+
+        ${resultado.estadoPago}
+
+      </div>
+
+
+      <div class="dato">
+
+        <span class="etiqueta">
+          Estado de entrega:
+        </span>
+
+        ${resultado.estadoEntrega}
+
+      </div>
+
+
+      <button
+        id="btnEntregar"
+        onclick="registrarEntrega()"
+      >
+
+        ENTREGAR TABLAS
+
+      </button>
+
+    `;
+
+  }
 
 
   // ==========================================
-  // COMPRA NO ENCONTRADA
+  // REGISTRAR ENTREGA
   // ==========================================
 
-  if (!resultado || !resultado.ok) {
+  function registrarEntrega() {
 
-    contenedor.innerHTML =
 
-      '<div class="error">' +
-      '❌ COMPRA NO ENCONTRADA' +
-      '</div>' +
+    if (!codigoActual) {
 
-      '<div class="dato">' +
-      (
-        resultado &&
-        resultado.mensaje
-          ? resultado.mensaje
-          : "No fue posible validar el código."
+      return;
+
+    }
+
+
+    const boton =
+      document.getElementById(
+        "btnEntregar"
+      );
+
+
+    if (boton) {
+
+      boton.disabled = true;
+
+      boton.innerText =
+        "REGISTRANDO ENTREGA...";
+
+    }
+
+
+    document
+      .getElementById("estado")
+      .innerText =
+        "Validando y registrando entrega...";
+
+
+    const callback =
+      "respuestaEntrega";
+
+
+    const url =
+
+      URL_APPS_SCRIPT +
+
+      "?pagina=entregar" +
+
+      "&codigo=" +
+
+      encodeURIComponent(
+        codigoActual
       ) +
-      '</div>';
 
-    return;
-  }
+      "&callback=" +
 
+      callback;
 
-  codigoActual =
-    resultado.codigo;
 
+    const script =
+      document.createElement(
+        "script"
+      );
 
-  const estadoPago =
-    String(resultado.estadoPago)
-      .trim()
-      .toUpperCase();
 
+    script.src =
+      url;
 
-  const estadoEntrega =
-    String(resultado.estadoEntrega)
-      .trim()
-      .toUpperCase();
 
+    script.onerror =
+      function() {
 
-  // ==========================================
-  // CASO 1:
-  // YA FUE ENTREGADA
-  // ==========================================
-
-  if (estadoEntrega === "ENTREGADO") {
-
-    contenedor.innerHTML =
-
-      '<div class="error">' +
-      '⚠️ COMPRA YA ENTREGADA' +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Código:</span> ' +
-      resultado.codigo +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Cliente:</span> ' +
-      resultado.nombre +
-      '</div>' +
-
-      '<div class="cantidad">' +
-      resultado.cantidad +
-      ' TABLAS' +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Estado de pago:</span> ' +
-      resultado.estadoPago +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Estado de entrega:</span> ' +
-      '<strong>ENTREGADO</strong>' +
-      '</div>' +
-
-      '<div class="dato error">' +
-      'NO ENTREGAR NUEVAMENTE' +
-      '</div>' +
-
-      '<button ' +
-      'id="btnNuevo" ' +
-      'onclick="nuevaLectura()">' +
-      'ESCANEAR NUEVA COMPRA' +
-      '</button>';
-
-    return;
-  }
-
-
-  // ==========================================
-  // CASO 2:
-  // PAGO NO CONFIRMADO
-  // ==========================================
-
-  if (estadoPago !== "CONFIRMADO") {
-
-    contenedor.innerHTML =
-
-      '<div class="error">' +
-      '❌ PAGO NO CONFIRMADO' +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Código:</span> ' +
-      resultado.codigo +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Cliente:</span> ' +
-      resultado.nombre +
-      '</div>' +
-
-      '<div class="cantidad">' +
-      resultado.cantidad +
-      ' TABLAS' +
-      '</div>' +
-
-      '<div class="dato">' +
-      '<span class="etiqueta">Estado de pago:</span> ' +
-      resultado.estadoPago +
-      '</div>' +
-
-      '<div class="dato error">' +
-      'NO ENTREGAR TABLAS' +
-      '</div>' +
-
-      '<button ' +
-      'id="btnNuevo" ' +
-      'onclick="nuevaLectura()">' +
-      'ESCANEAR NUEVA COMPRA' +
-      '</button>';
-
-    return;
-  }
-
-
-  // ==========================================
-  // CASO 3:
-  // PAGO CONFIRMADO + ENTREGA PENDIENTE
-  // ==========================================
-
-  let botonEntrega =
-
-    '<button ' +
-    'id="btnEntregar" ' +
-    'onclick="registrarEntrega()">' +
-    'ENTREGAR TABLAS' +
-    '</button>';
-
-
-  contenedor.innerHTML =
-
-    '<div class="ok">' +
-    '✅ COMPRA LISTA PARA ENTREGA' +
-    '</div>' +
-
-    '<div class="dato">' +
-    '<span class="etiqueta">Código:</span> ' +
-    resultado.codigo +
-    '</div>' +
-
-    '<div class="dato">' +
-    '<span class="etiqueta">Cliente:</span> ' +
-    resultado.nombre +
-    '</div>' +
-
-    '<div class="cantidad">' +
-    resultado.cantidad +
-    ' TABLAS' +
-    '</div>' +
-
-    '<div class="dato">' +
-    '<span class="etiqueta">Estado de pago:</span> ' +
-    resultado.estadoPago +
-    '</div>' +
-
-    '<div class="dato">' +
-    '<span class="etiqueta">Estado de entrega:</span> ' +
-    resultado.estadoEntrega +
-    '</div>' +
-
-    botonEntrega;
-
-}
-
-
-    // ==================================================
-    // REGISTRAR ENTREGA
-    // ==================================================
-
-    function registrarEntrega() {
-
-      if (!codigoActual) {
-        return;
-      }
-
-
-      const boton =
-        document.getElementById("btnEntregar");
-
-
-      if (boton) {
-        boton.disabled = true;
-        boton.innerText =
-          "REGISTRANDO ENTREGA...";
-      }
-
-
-      document
-        .getElementById("estado")
-        .innerText =
-          "Validando y registrando entrega...";
-
-
-      const callback =
-        "respuestaEntrega";
-
-
-      const url =
-        URL_APPS_SCRIPT +
-        "?pagina=entregar" +
-        "&codigo=" +
-        encodeURIComponent(codigoActual) +
-        "&callback=" +
-        callback;
-
-
-      const script =
-        document.createElement("script");
-
-
-      script.src = url;
-
-
-      script.onerror = function() {
 
         document
           .getElementById("estado")
           .innerText =
             "No fue posible registrar la entrega.";
 
+
         if (boton) {
-          boton.disabled = false;
+
+          boton.disabled =
+            false;
+
           boton.innerText =
             "ENTREGAR TABLAS";
+
         }
 
       };
 
 
-      document.body.appendChild(script);
+    document
+      .body
+      .appendChild(script);
 
-    }
-
-
-    // ==================================================
-    // RESPUESTA ENTREGA
-    // ==================================================
-
-    function respuestaEntrega(resultado) {
-
-      const contenedor =
-        document.getElementById("resultado");
+  }
 
 
-      if (!resultado || !resultado.ok) {
+  // ==========================================
+  // RESPUESTA ENTREGA
+  // ==========================================
 
-        contenedor.innerHTML =
+  function respuestaEntrega(
+    resultado
+  ) {
 
-          '<div class="error">' +
-          '⚠️ NO SE PUDO ENTREGAR' +
-          '</div>' +
 
-          '<div class="dato">' +
-          (
+    const contenedor =
+      document.getElementById(
+        "resultado"
+      );
+
+
+    if (
+      !resultado ||
+      !resultado.ok
+    ) {
+
+
+      contenedor.innerHTML = `
+
+        <div
+          class="tituloResultado error"
+        >
+
+          NO SE PUDO REGISTRAR
+
+        </div>
+
+
+        <div class="dato">
+
+          ${
             resultado &&
             resultado.mensaje
               ? resultado.mensaje
               : "No fue posible registrar la entrega."
-          ) +
-          '</div>';
+          }
 
-        return;
-
-      }
+        </div>
 
 
-      contenedor.innerHTML =
+        <button
+          id="btnNuevo"
+          onclick="nuevaLectura()"
+        >
 
-        '<div class="entregado">' +
-        '✅ ENTREGA REGISTRADA' +
-        '</div>' +
+          ESCANEAR NUEVA COMPRA
 
-        '<div class="cantidad">' +
-        resultado.cantidad +
-        ' TABLAS ENTREGADAS' +
-        '</div>' +
+        </button>
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Código:</span> ' +
-        resultado.codigo +
-        '</div>' +
+      `;
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Estado:</span> ' +
-        resultado.estadoEntrega +
-        '</div>' +
 
-        '<button ' +
-        'id="btnNuevo" ' +
-        'onclick="nuevaLectura()">' +
-        'ESCANEAR NUEVA COMPRA' +
-        '</button>';
-
-      document
-        .getElementById("estado")
-        .innerText =
-          "Entrega registrada correctamente.";
+      return;
 
     }
 
 
-    // ==================================================
-    // NUEVA LECTURA
-    // ==================================================
+    contenedor.innerHTML = `
 
-    function nuevaLectura() {
+      <div
+        class="mensajeFinal ok"
+      >
 
-      codigoActual = null;
-      procesando = false;
+        ENTREGA REGISTRADA
 
-
-      document
-        .getElementById("resultado")
-        .style.display = "none";
+      </div>
 
 
-      document
-        .getElementById("estado")
-        .innerText =
-          "Listo para escanear.";
+      <div class="cantidadBox">
+
+        <div class="cantidadNumero">
+
+          ${resultado.cantidad}
+
+        </div>
+
+        <div class="cantidadTexto">
+
+          TABLAS ENTREGADAS
+
+        </div>
+
+      </div>
 
 
-      document
-        .getElementById("btnEscanear")
-        .classList.remove("oculto");
+      <div class="dato">
 
-    }
+        <span class="etiqueta">
+          Código:
+        </span>
 
-  </script>
+        ${resultado.codigo}
+
+      </div>
+
+
+      <div class="dato">
+
+        <span class="etiqueta">
+          Estado:
+        </span>
+
+        ENTREGADO
+
+      </div>
+
+
+      <button
+        id="btnNuevo"
+        onclick="nuevaLectura()"
+      >
+
+        ESCANEAR NUEVA COMPRA
+
+      </button>
+
+    `;
+
+
+    document
+      .getElementById("estado")
+      .innerText =
+        "Entrega registrada correctamente.";
+
+  }
+
+
+  // ==========================================
+  // NUEVA LECTURA
+  // ==========================================
+
+  function nuevaLectura() {
+
+
+    codigoActual =
+      null;
+
+    procesando =
+      false;
+
+
+    document
+      .getElementById("resultado")
+      .style.display =
+        "none";
+
+
+    document
+      .getElementById("estado")
+      .innerText =
+        "Listo para escanear.";
+
+
+    document
+      .getElementById("btnEscanear")
+      .classList
+      .remove("oculto");
+
+  }
+
+
+</script>
+
 
 </body>
 
