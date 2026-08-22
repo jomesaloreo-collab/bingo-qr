@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Lector QR - Bingo CCP</title>
+  <title>Validación Bingo CCP</title>
 
   <script
     src="https://unpkg.com/html5-qrcode"
@@ -27,7 +27,12 @@
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 5px;
+    }
+
+    .subtitulo {
+      margin-top: 0;
+      color: #555;
     }
 
     #reader {
@@ -42,11 +47,51 @@
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      margin: 5px;
+    }
+
+    #btnEscanear {
+      background: #1a73e8;
+      color: white;
+    }
+
+    #btnNuevo {
+      background: #555;
+      color: white;
     }
 
     #estado {
       margin-top: 20px;
       font-size: 17px;
+    }
+
+    #resultado {
+      display: none;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 0 2px 10px rgba(0,0,0,.10);
+    }
+
+    .dato {
+      margin: 10px 0;
+    }
+
+    .etiqueta {
+      font-weight: bold;
+    }
+
+    .ok {
+      color: #188038;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #d93025;
+      font-weight: bold;
     }
 
   </style>
@@ -56,9 +101,9 @@
 
 <body>
 
-  <h1>LECTOR QR</h1>
+  <h1>VALIDACIÓN DE TABLAS</h1>
 
-  <p>
+  <p class="subtitulo">
     Bingo CCP
   </p>
 
@@ -79,15 +124,40 @@
   </p>
 
 
+  <div id="resultado"></div>
+
+
   <script>
 
     let scanner = null;
+    let procesando = false;
 
+
+    // ==================================================
+    // URL DE TU WEB APP DE APPS SCRIPT
+    // ==================================================
+
+    const URL_APPS_SCRIPT =
+      "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+
+    // ==================================================
+    // INICIAR ESCÁNER
+    // ==================================================
 
     function iniciarEscaner() {
 
+      if (procesando) {
+        return;
+      }
+
       document
         .getElementById("btnEscanear")
+        .style.display = "none";
+
+
+      document
+        .getElementById("resultado")
         .style.display = "none";
 
 
@@ -123,17 +193,10 @@
 
         configuracion,
 
-        function(codigo) {
-
-          document
-            .getElementById("estado")
-            .innerText =
-              "QR DETECTADO: " + codigo;
-
-        },
+        codigoLeido,
 
         function(error) {
-          // Errores normales mientras busca el QR.
+          // Ignorar errores normales mientras busca el QR.
         }
 
       )
@@ -142,7 +205,7 @@
         document
           .getElementById("estado")
           .innerText =
-            "Cámara funcionando. Apunta al QR.";
+            "Cámara funcionando. Apunta al código QR.";
 
       })
       .catch(function(error) {
@@ -159,6 +222,216 @@
           .style.display = "inline-block";
 
       });
+
+    }
+
+
+    // ==================================================
+    // QR LEÍDO
+    // ==================================================
+
+    function codigoLeido(codigo) {
+
+      if (procesando) {
+        return;
+      }
+
+      procesando = true;
+
+
+      document
+        .getElementById("estado")
+        .innerText =
+          "QR leído: " + codigo +
+          ". Consultando compra...";
+
+
+      detenerEscaner();
+
+
+      consultarCompra(codigo);
+
+    }
+
+
+    // ==================================================
+    // DETENER ESCÁNER
+    // ==================================================
+
+    function detenerEscaner() {
+
+      if (!scanner) {
+        return;
+      }
+
+
+      scanner.stop()
+        .then(function() {
+
+          scanner.clear();
+
+          scanner = null;
+
+        })
+        .catch(function(error) {
+
+          console.error(error);
+
+        });
+
+    }
+
+
+    // ==================================================
+    // CONSULTAR APPS SCRIPT
+    // ==================================================
+
+    function consultarCompra(codigo) {
+
+      const callback =
+        "respuestaAppsScript";
+
+
+      const url =
+        URL_APPS_SCRIPT +
+        "?pagina=consulta" +
+        "&codigo=" +
+        encodeURIComponent(codigo) +
+        "&callback=" +
+        callback;
+
+
+      const script =
+        document.createElement("script");
+
+
+      script.src = url;
+
+
+      script.onerror = function() {
+
+        document
+          .getElementById("estado")
+          .innerText =
+            "No fue posible consultar la compra.";
+
+        procesando = false;
+
+      };
+
+
+      document.body.appendChild(script);
+
+    }
+
+
+    // ==================================================
+    // RESPUESTA DE APPS SCRIPT
+    // ==================================================
+
+    function respuestaAppsScript(resultado) {
+
+      mostrarResultado(resultado);
+
+      procesando = false;
+
+    }
+
+
+    // ==================================================
+    // MOSTRAR RESULTADO
+    // ==================================================
+
+    function mostrarResultado(resultado) {
+
+      const contenedor =
+        document.getElementById("resultado");
+
+
+      contenedor.style.display = "block";
+
+
+      if (!resultado || !resultado.ok) {
+
+        contenedor.innerHTML =
+
+          '<div class="error">' +
+          '❌ COMPRA NO ENCONTRADA' +
+          '</div>' +
+
+          '<div class="dato">' +
+          (resultado && resultado.mensaje
+            ? resultado.mensaje
+            : "No fue posible validar el código.") +
+          '</div>';
+
+        return;
+
+      }
+
+
+      contenedor.innerHTML =
+
+        '<div class="ok">' +
+        '✅ COMPRA ENCONTRADA' +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Código:</span> ' +
+        resultado.codigo +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Nombre:</span> ' +
+        resultado.nombre +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Cantidad de tablas:</span> ' +
+        resultado.cantidad +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Valor total:</span> $' +
+        resultado.valor.toLocaleString("es-CO") +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Estado de pago:</span> ' +
+        resultado.estadoPago +
+        '</div>' +
+
+        '<div class="dato">' +
+        '<span class="etiqueta">Estado de entrega:</span> ' +
+        resultado.estadoEntrega +
+        '</div>';
+
+    }
+
+
+    // ==================================================
+    // NUEVA LECTURA
+    // ==================================================
+
+    function nuevaLectura() {
+
+      document
+        .getElementById("resultado")
+        .style.display = "none";
+
+
+      document
+        .getElementById("estado")
+        .innerText =
+          "Listo para escanear.";
+
+
+      document
+        .getElementById("btnEscanear")
+        .style.display = "inline-block";
+
+
+      procesando = false;
 
     }
 
