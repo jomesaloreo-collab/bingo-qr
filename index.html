@@ -372,99 +372,202 @@
     // MOSTRAR RESULTADO
     // ==================================================
 
-    function mostrarResultado(resultado) {
+function mostrarResultado(resultado) {
 
-      const contenedor =
-        document.getElementById("resultado");
+  const contenedor =
+    document.getElementById("resultado");
 
-
-      contenedor.style.display = "block";
-
-
-      if (!resultado || !resultado.ok) {
-
-        contenedor.innerHTML =
-
-          '<div class="error">' +
-          '❌ COMPRA NO ENCONTRADA' +
-          '</div>' +
-
-          '<div class="dato">' +
-          (
-            resultado &&
-            resultado.mensaje
-              ? resultado.mensaje
-              : "No fue posible validar el código."
-          ) +
-          '</div>';
-
-        return;
-
-      }
+  contenedor.style.display = "block";
 
 
-      codigoActual =
-        resultado.codigo;
+  // ==========================================
+  // COMPRA NO ENCONTRADA
+  // ==========================================
+
+  if (!resultado || !resultado.ok) {
+
+    contenedor.innerHTML =
+
+      '<div class="error">' +
+      '❌ COMPRA NO ENCONTRADA' +
+      '</div>' +
+
+      '<div class="dato">' +
+      (
+        resultado &&
+        resultado.mensaje
+          ? resultado.mensaje
+          : "No fue posible validar el código."
+      ) +
+      '</div>';
+
+    return;
+  }
 
 
-      let botonEntrega = "";
+  codigoActual =
+    resultado.codigo;
 
 
-      if (
-        String(resultado.estadoPago)
-          .trim()
-          .toUpperCase() === "CONFIRMADO"
-        &&
-        String(resultado.estadoEntrega)
-          .trim()
-          .toUpperCase() !== "ENTREGADO"
-      ) {
-
-        botonEntrega =
-
-          '<button ' +
-          'id="btnEntregar" ' +
-          'onclick="registrarEntrega()">' +
-          'ENTREGAR TABLAS' +
-          '</button>';
-
-      }
+  const estadoPago =
+    String(resultado.estadoPago)
+      .trim()
+      .toUpperCase();
 
 
-      contenedor.innerHTML =
+  const estadoEntrega =
+    String(resultado.estadoEntrega)
+      .trim()
+      .toUpperCase();
 
-        '<div class="ok">' +
-        '✅ COMPRA CONFIRMADA' +
-        '</div>' +
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Código:</span> ' +
-        resultado.codigo +
-        '</div>' +
+  // ==========================================
+  // CASO 1:
+  // YA FUE ENTREGADA
+  // ==========================================
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Cliente:</span> ' +
-        resultado.nombre +
-        '</div>' +
+  if (estadoEntrega === "ENTREGADO") {
 
-        '<div class="cantidad">' +
-        resultado.cantidad +
-        ' TABLAS' +
-        '</div>' +
+    contenedor.innerHTML =
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Estado de pago:</span> ' +
-        resultado.estadoPago +
-        '</div>' +
+      '<div class="error">' +
+      '⚠️ COMPRA YA ENTREGADA' +
+      '</div>' +
 
-        '<div class="dato">' +
-        '<span class="etiqueta">Estado de entrega:</span> ' +
-        resultado.estadoEntrega +
-        '</div>' +
+      '<div class="dato">' +
+      '<span class="etiqueta">Código:</span> ' +
+      resultado.codigo +
+      '</div>' +
 
-        botonEntrega;
+      '<div class="dato">' +
+      '<span class="etiqueta">Cliente:</span> ' +
+      resultado.nombre +
+      '</div>' +
 
-    }
+      '<div class="cantidad">' +
+      resultado.cantidad +
+      ' TABLAS' +
+      '</div>' +
+
+      '<div class="dato">' +
+      '<span class="etiqueta">Estado de pago:</span> ' +
+      resultado.estadoPago +
+      '</div>' +
+
+      '<div class="dato">' +
+      '<span class="etiqueta">Estado de entrega:</span> ' +
+      '<strong>ENTREGADO</strong>' +
+      '</div>' +
+
+      '<div class="dato error">' +
+      'NO ENTREGAR NUEVAMENTE' +
+      '</div>' +
+
+      '<button ' +
+      'id="btnNuevo" ' +
+      'onclick="nuevaLectura()">' +
+      'ESCANEAR NUEVA COMPRA' +
+      '</button>';
+
+    return;
+  }
+
+
+  // ==========================================
+  // CASO 2:
+  // PAGO NO CONFIRMADO
+  // ==========================================
+
+  if (estadoPago !== "CONFIRMADO") {
+
+    contenedor.innerHTML =
+
+      '<div class="error">' +
+      '❌ PAGO NO CONFIRMADO' +
+      '</div>' +
+
+      '<div class="dato">' +
+      '<span class="etiqueta">Código:</span> ' +
+      resultado.codigo +
+      '</div>' +
+
+      '<div class="dato">' +
+      '<span class="etiqueta">Cliente:</span> ' +
+      resultado.nombre +
+      '</div>' +
+
+      '<div class="cantidad">' +
+      resultado.cantidad +
+      ' TABLAS' +
+      '</div>' +
+
+      '<div class="dato">' +
+      '<span class="etiqueta">Estado de pago:</span> ' +
+      resultado.estadoPago +
+      '</div>' +
+
+      '<div class="dato error">' +
+      'NO ENTREGAR TABLAS' +
+      '</div>' +
+
+      '<button ' +
+      'id="btnNuevo" ' +
+      'onclick="nuevaLectura()">' +
+      'ESCANEAR NUEVA COMPRA' +
+      '</button>';
+
+    return;
+  }
+
+
+  // ==========================================
+  // CASO 3:
+  // PAGO CONFIRMADO + ENTREGA PENDIENTE
+  // ==========================================
+
+  let botonEntrega =
+
+    '<button ' +
+    'id="btnEntregar" ' +
+    'onclick="registrarEntrega()">' +
+    'ENTREGAR TABLAS' +
+    '</button>';
+
+
+  contenedor.innerHTML =
+
+    '<div class="ok">' +
+    '✅ COMPRA LISTA PARA ENTREGA' +
+    '</div>' +
+
+    '<div class="dato">' +
+    '<span class="etiqueta">Código:</span> ' +
+    resultado.codigo +
+    '</div>' +
+
+    '<div class="dato">' +
+    '<span class="etiqueta">Cliente:</span> ' +
+    resultado.nombre +
+    '</div>' +
+
+    '<div class="cantidad">' +
+    resultado.cantidad +
+    ' TABLAS' +
+    '</div>' +
+
+    '<div class="dato">' +
+    '<span class="etiqueta">Estado de pago:</span> ' +
+    resultado.estadoPago +
+    '</div>' +
+
+    '<div class="dato">' +
+    '<span class="etiqueta">Estado de entrega:</span> ' +
+    resultado.estadoEntrega +
+    '</div>' +
+
+    botonEntrega;
+
+}
 
 
     // ==================================================
