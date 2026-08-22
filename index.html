@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Lector QR - Bingo CCP</title>
+
+  <script
+    src="https://unpkg.com/html5-qrcode"
+  ></script>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background: #f4f6f8;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    button {
+      padding: 14px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #estado {
+      margin-top: 20px;
+      font-size: 17px;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <h1>LECTOR QR</h1>
+
+  <p>
+    Bingo CCP
+  </p>
+
+
+  <button
+    id="btnEscanear"
+    onclick="iniciarEscaner()"
+  >
+    ESCANEAR QR
+  </button>
+
+
+  <div id="reader"></div>
+
+
+  <p id="estado">
+    Presiona ESCANEAR QR para comenzar.
+  </p>
+
+
+  <script>
+
+    let scanner = null;
+
+
+    function iniciarEscaner() {
+
+      document
+        .getElementById("btnEscanear")
+        .style.display = "none";
+
+
+      document
+        .getElementById("estado")
+        .innerText =
+          "Solicitando acceso a la cámara...";
+
+
+      scanner =
+        new Html5Qrcode("reader");
+
+
+      const configuracion = {
+
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        },
+
+        aspectRatio: 1.0
+
+      };
+
+
+      scanner.start(
+
+        {
+          facingMode: "environment"
+        },
+
+        configuracion,
+
+        function(codigo) {
+
+          document
+            .getElementById("estado")
+            .innerText =
+              "QR DETECTADO: " + codigo;
+
+        },
+
+        function(error) {
+          // Errores normales mientras busca el QR.
+        }
+
+      )
+      .then(function() {
+
+        document
+          .getElementById("estado")
+          .innerText =
+            "Cámara funcionando. Apunta al QR.";
+
+      })
+      .catch(function(error) {
+
+        console.error(error);
+
+        document
+          .getElementById("estado")
+          .innerText =
+            "No fue posible acceder a la cámara.";
+
+        document
+          .getElementById("btnEscanear")
+          .style.display = "inline-block";
+
+      });
+
+    }
+
+  </script>
+
+</body>
+
+</html>
